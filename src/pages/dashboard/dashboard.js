@@ -1,0 +1,89 @@
+import * as React from "react";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import MyOrders from "./myOrders";
+import MovieListTable from "./movieList";
+import SalesList from "./saleList";
+function DashBoard(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+DashBoard.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
+export default function BasicTabs() {
+  const [value, setValue] = React.useState(1);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="我的订单" {...a11yProps(0)} />
+          <Tab label="场次列表" {...a11yProps(1)} />
+          <Tab label="销售统计" {...a11yProps(2)} />
+
+          <Tab label="备份订单" {...a11yProps(3)} />
+
+          <Tab label="加载订单" {...a11yProps(4)} />
+
+          <Tab label="退出" {...a11yProps(5)} />
+        </Tabs>
+      </Box>
+      <DashBoard value={value} index={0}>
+        {MyOrders()}
+      </DashBoard>
+      <DashBoard value={value} index={1}>
+        {MovieListTable()}
+      </DashBoard>
+      <DashBoard value={value} index={2}>
+        {SalesList()}
+      </DashBoard>
+      <DashBoard value={value} index={3}>
+        Item Three
+      </DashBoard>
+      <DashBoard value={value} index={4}>
+        Item Three
+      </DashBoard>
+      <DashBoard value={value} index={5}>
+        Item Three
+      </DashBoard>
+    </Box>
+  );
+}
