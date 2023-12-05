@@ -15,25 +15,44 @@ import User from "../utils/user"
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function SignUp({ handleRegister, setRegistering}) {
   const [user, setUser] = React.useState(new User());
-  console.log(user.gender);
+  const [success, setSuccess] = React.useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+    console.log(data.get('account'));
     setUser({
       ...user,
       account: data.get('account'),
       password: data.get('password'),
       confirmPassword: data.get('confirmPassword'),
-      nickname: data.get('nickname'),
+      nickName: data.get('nickname'),
       email: data.get('email'),
       phone: data.get('phone'),
     });
+    try {
+      const response = await handleRegister({
+        ...user,
+        account: data.get('account'),
+        password: data.get('password'),
+        confirmPassword: data.get('confirmPassword'),
+        nickName: data.get('nickname'),
+        email: data.get('email'),
+        phone: data.get('phone'),
+      });
+      if (response === 200) {
+        // Registration successful, you may handle it as needed
+        console.log(user);
+        setRegistering(true);
+        setSuccess(true)
+      }
+    } catch (error) {
+      // Handle registration error
+      console.error("Registration failed:", error.message);
+    }
 
-    console.log(user);
   };
 
   const handleChange = (event) => {
@@ -43,6 +62,11 @@ export default function SignUp() {
         gender: event.target.value,
       });
     console.log(user.gender);
+  };
+
+  const handleRegisterClick = () => {
+    // Assuming setRegistering is a function
+    setRegistering(false);
   };
 
   return (
@@ -140,8 +164,11 @@ export default function SignUp() {
               id="phone"
               autoComplete="tel"
             />
+            {success ? ( <Typography component="h1" variant="h5">
+              注册成功
+              </Typography>) : (<></>)}
             <div style={{ display: "flex", gap: "8px", marginTop: "16px" }}>
-              <Button type="button" variant="contained">
+              <Button type="button" variant="contained" onClick={handleRegisterClick}>
                 返回
               </Button>
               <Button type="submit" variant="contained">

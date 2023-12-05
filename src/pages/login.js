@@ -9,20 +9,24 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function SignIn({ handleLogin, setRegistering }) {
   const [account, setAccount] = React.useState("");
   const [password, setPassword] = React.useState("");
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    setAccount(data.get("account"));
-    setPassword(data.get("password"));
     console.log({
       setAccount: data.get("account"),
       setPassword: data.get("password"),
       account: data.get("account"),
       password: data.get("password"),
     });
+    handleLogin(data.get("account"), data.get("password"));
+  };
+
+  const handleRegisterClick = () => {
+    // Assuming setRegistering is a function
+    setRegistering(true);
   };
   
   return (
@@ -73,7 +77,7 @@ export default function SignIn() {
               <Button type="reset" variant="contained">
                 清除
               </Button>
-              <Button type="button" variant="contained">
+              <Button type="button" variant="contained" onClick={handleRegisterClick}>
                 注册
               </Button>
             </div>

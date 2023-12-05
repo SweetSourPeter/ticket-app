@@ -7,16 +7,27 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import MyOrdersListItem from '../../utils/myOrdersListItem';
-const orders = [
-  new MyOrdersListItem(1, '1242354145', 'Star Wars', '2022-11-12 13:13:13', '2022-11-12 13:13:13', 1, 45),
-  new MyOrdersListItem(1, '1242354145', 'Star Wars', '2022-11-12 13:13:13', '2022-11-12 13:13:13', 1, 45),
-  new MyOrdersListItem(1, '1242354145', 'Star Wars', '2022-11-12 13:13:13', '2022-11-12 13:13:13', 1, 45),
-  new MyOrdersListItem(1, '1242354145', 'Star Wars', '2022-11-12 13:13:13', '2022-11-12 13:13:13', 1, 45),
-  // Add more OrderListItem instances as needed
-];
+// import MyOrdersListItem from '../../utils/myOrdersListItem';
+import {getMyOrders} from '../../services/orders';
+
+// const orders = [
+//   new MyOrdersListItem(1, '1242354145', 'Star Wars', '2022-11-12 13:13:13', '2022-11-12 13:13:13', 1, 45),
+//   new MyOrdersListItem(1, '1242354145', 'Star Wars', '2022-11-12 13:13:13', '2022-11-12 13:13:13', 1, 45),
+//   new MyOrdersListItem(1, '1242354145', 'Star Wars', '2022-11-12 13:13:13', '2022-11-12 13:13:13', 1, 45),
+//   new MyOrdersListItem(1, '1242354145', 'Star Wars', '2022-11-12 13:13:13', '2022-11-12 13:13:13', 1, 45),
+//   // Add more OrderListItem instances as needed
+// ];
 
 export default function MyOrders() {
+  const [orders, setOrders] = React.useState([]);
+
+  React.useEffect(() => {
+    // Fetch orders when the component mounts
+    getMyOrders()
+      .then((fetchedOrders) => setOrders(fetchedOrders))
+      .catch((error) => console.error('Error fetching orders:', error.message));
+  }, []);
+console.log("orders: ", orders);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650}} aria-label="customized table">
@@ -37,12 +48,12 @@ export default function MyOrders() {
               <TableCell component="th" scope="row">
                 {order.id}
               </TableCell>
-              <TableCell align="left">{order.orderNumber}</TableCell>
+              <TableCell align="left">{order.id}</TableCell>
               <TableCell align="left">{order.movieName}</TableCell>
               <TableCell align="left">{order.showTime}</TableCell>
               <TableCell align="left">{order.purchaseTime}</TableCell>
-              <TableCell align="left">{order.ticketQuantity}</TableCell>
-              <TableCell align="left">{order.amount}</TableCell>
+              <TableCell align="left">{order.ticketCount}</TableCell>
+              <TableCell align="left">{order.price}</TableCell>
             </TableRow>
           ))}
         </TableBody>

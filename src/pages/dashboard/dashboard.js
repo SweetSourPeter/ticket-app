@@ -8,7 +8,7 @@ import MyOrders from "./myOrders";
 import MovieListTable from "./movieList";
 import SalesList from "./saleList";
 function DashBoard(props) {
-  const { children, value, index, ...other } = props;
+  const { children, value, index, handleLogout, ...other } = props;
 
   return (
     <div
@@ -31,6 +31,7 @@ DashBoard.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
+  handleLogout: PropTypes.func.isRequired,
 };
 
 function a11yProps(index) {
@@ -40,12 +41,20 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs() {
+export default function BasicTabs({ handleLogout }) {
   const [value, setValue] = React.useState(1);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (newValue === 5) {
+      handleLogout();
+    }
   };
+
+  const handleLogoutClick = () => {
+    // Assuming setRegistering is a function
+    handleLogout();
+  }
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -63,7 +72,7 @@ export default function BasicTabs() {
 
           <Tab label="加载订单" {...a11yProps(4)} />
 
-          <Tab label="退出" {...a11yProps(5)} />
+          <Tab label="退出" {...a11yProps(5)}/>  
         </Tabs>
       </Box>
       <DashBoard value={value} index={0}>
@@ -76,13 +85,13 @@ export default function BasicTabs() {
         {SalesList()}
       </DashBoard>
       <DashBoard value={value} index={3}>
-        Item Three
+        
       </DashBoard>
       <DashBoard value={value} index={4}>
-        Item Three
+        
       </DashBoard>
       <DashBoard value={value} index={5}>
-        Item Three
+        
       </DashBoard>
     </Box>
   );

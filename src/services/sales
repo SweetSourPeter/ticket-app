@@ -1,0 +1,28 @@
+// sales.js
+
+const BASE_URL = 'http://localhost:8080/api/sales/all';
+
+export async function getSales() {
+  const token = localStorage.getItem("token") || "";
+
+  try {
+    const response = await fetch(BASE_URL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+      },
+    });
+
+    if (response.ok) {
+      const sales = await response.json();
+      return sales;
+    } else {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to fetch sales');
+    }
+  } catch (error) {
+    console.error('Error fetching sales:', error.message);
+    throw error;
+  }
+}
